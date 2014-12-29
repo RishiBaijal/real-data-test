@@ -22,6 +22,8 @@ import time
 import warnings
 warnings.filterwarnings("ignore")
 
+import logging
+
 
 def test_all_datasets(directory):
     print("Testing all data sets started at:  {}".format(time.now()))
@@ -30,14 +32,15 @@ def test_all_datasets(directory):
     datasets = [f for f in listdir(directory) if isfile(join(directory, f)) and
          '.h5' in f and '.swp' not in f]
     for dataset in datasets:
-        test_single_dataset(dataset)
+        dataset_obj=DataSet(join(directory, dataset))
+        test_single_dataset(dataset_obj)
 
 
-def test_single_dataset(dataset):
+def test_single_dataset(dataset_obj):
     print("Testing all function of {} dataset started at:  {}".format(dataset, time.now()))
     print("-"*60)
-    test_all_buildings(dataset)
-    test_metadata_dataset(dataset)
+    test_all_buildings(dataset_obj)
+    test_metadata_dataset(dataset_obj)
 
 def test_all_buildings(dataset):
     buildings = dataset.buildings
@@ -53,13 +56,25 @@ def test_single_building(building):
 def test_single_building_metadata(building):
     try:
         print(building.metadata)
-    except:
+    except Exception, e:
         # log it..
+        logging.exception(e)
+
+    try:
+        print (building.identifier)
+    except:
+        logging.exception(e)
+    
+
 
     try:
         print(building.describe)
     except:
         # log it
+        logging.exception(e)
+
+
+
 
 def test_single_meter_group(elec):
     return None
