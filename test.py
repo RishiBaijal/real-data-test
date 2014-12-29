@@ -40,7 +40,7 @@ def list_of_appliances(elec):
 
 def test_all_datasets(directory):
     print("Testing all data sets started at:  {}".format(time.time()))
-    print("-"*60)
+    print("="*60)
     check_directory_exists(directory)
     datasets = [f for f in listdir(directory) if isfile(join(directory, f)) and
          '.h5' in f and '.swp' not in f]
@@ -51,7 +51,7 @@ def test_all_datasets(directory):
 
 def test_single_dataset(dataset_obj):
     print("Testing all function of {} dataset started at:  {}".format(dataset_obj, time.time()))
-    print("-"*60)
+    print("="*60)
     test_all_buildings(dataset_obj)
     test_metadata_dataset(dataset_obj)
 
@@ -59,8 +59,6 @@ def test_all_buildings(dataset):
     buildings = dataset.buildings
     print (buildings)
     for building in buildings:
-        print ("The type of the iterator is ", type (building))
-        print ("The value is ", building)
         test_single_building(buildings[building])
 
 def test_single_building(building):
@@ -98,19 +96,63 @@ def test_single_meter_group(elec):
         print ("Meters: ")
         for meter in elec.meters:
             print (meter)
+        print ("-"*60)
         print ("Appliances: ")
         for appliance in elec.appliances:
             print (appliance)
+        print ("-"*60)
+        print ("Good sections: ")
+        elec.good_sections()
+        print ("-"*60)
+        print  ("Checking if site meter", elec.is_site_meter())
+        print ("-"*60)
+        print ("Printing site meters ", elec.mains())
+        print ("-"*60)
         print ("Identifier ")
         print (elec.identifier)
-        print ("Tuple if meter instances: ")
+        print ("-"*60)
+        print ("Tuple of meter instances: ")
         print (elec.instance())
+        print ("-"*60)
+        print ("Creating generator load object.")
+        elec.load()
+        print ("-"*60)
+        print ("Printing the meters directly downstream of mains.")
+        elec.meters_directly_downstream_of_mains()
+        print ("-"*60)
+        print ("Printing nested metergroups", elec.nested_metergroups())
+        print ("-"*60)
         print ("Timeframe: ", elec.get_timeframe())
+        print ("-"*60)
         print ("Available power AC types: ", elec.available_power_ac_types())
+        print ("-"*60)
         print ("Clearing cache...done.")
         elec.clear_cache()
+        print ("-"*60)
         print ("Testing if there are meters from multiple buildings. Result returned by method: ", elec.contains_meters_from_multiple_buildings())
+        print ("-"*60)
         print ("List of disabled meters: ", elec.disabled_meters)
+        print ("-"*60)
+        print ("Power series: ")
+	elec.power_series()
+	elec.power_series_all_data()
+	print ("-"*60)
+	print ("Printing sub-meters: ", elec.submeters())
+	print ("-"*60)
+	print ("Testing switch_times: ", elec.switch_times())
+	print ("-"*60)
+	print ("Total energy: ", elec.total_energy())
+	print ("-"*60)
+	#print ("Computing pairwise correlation. This will take some time...", elec.pairwise_correlation())
+	print ("-"*60)
+	print ("Computing uptime: ", elec.uptime())
+	print ("-"*60)
+	print (elec.use_alternative_means())
+	print ("-"*60)
+	print ("Vampire power: ", elec.vampire_power())
+	print ("-"*60)
+	elec.when_on()
+	
         print ("Trying to determine the dominant appliance: ")
         try:
             elec.dominant_appliance()
@@ -118,6 +160,7 @@ def test_single_meter_group(elec):
             print ('''More than one dominant appliance in MeterGroup! (The dominant appliance per meter should be manually specified in the metadata. If it isn't and if there are multiple appliances for a meter then NILMTK assumes all appliances on that meter are dominant. NILMTK can't automatically distinguish between multiple appliances on the same meter (at least, not without using NILM!))''')
             pass
                 #print ("Dropout rate: ", elec.dropout_rate())
+        print ("-"*60)
         try:
             print ("Calculating energy per meter:")
             print (elec.energy_per_meter())
@@ -131,12 +174,12 @@ def test_single_meter_group(elec):
         except ValueError:
             print ("ValueError: Total size of array must remain unchanged.")
             pass
-
+        print ("-"*60)
         print ("Calculating fraction per meter.")
         elec.clear_cache()
         elec.fraction_per_meter()
         print (elec.fraction_per_meter())
-
+        print ("-"*60)
 
     except Exception as e:
         logging.exception(e)
