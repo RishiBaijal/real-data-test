@@ -25,6 +25,19 @@ warnings.filterwarnings("ignore")
 import logging
 
 
+def list_of_appliances(elec):
+    lis=[]
+    for i, obj in enumerate(elec.meters):
+        if (len(obj.appliances) > 0):
+            lis.append (obj.appliances[0].type['type'])
+        if (len(obj.appliances)==0):
+            lis.append(None)
+    return list(set(lis))
+
+
+
+
+
 def test_all_datasets(directory):
     print("Testing all data sets started at:  {}".format(time.time()))
     print("-"*60)
@@ -72,7 +85,7 @@ def test_single_building_metadata(building):
 
 
     try:
-        print(building.describe)
+        print(building.describe())
     except Exception, e:
         # log it
         logging.exception(e)
@@ -81,37 +94,53 @@ def test_single_building_metadata(building):
 
 
 def test_single_meter_group(elec):
-    print ("Appliances: ")
-    for appliance in elec.appliances:
-        print (appliance)
-    print ("Timeframe: ", elec.get_timeframe())
-    print ("Available power AC types: ", elec.available_power_ac_types())
-    print ("Clearing cache...done.")
-    elec.clear_cache()
-    print ("Testing if there are meters from multiple buildings. Result returned by method: ", elec.contains_meters_from_multiple_buildings())
-    print ("List of disabled meters: ", elec.disabled_meters)
-    print ("Trying to determine the dominant appliance: ")
     try:
-        elec.dominant_appliance()
-    except RuntimeError:
-        print ('''More than one dominant appliance in MeterGroup! (The dominant appliance per meter should be manually specified in the metadata. If it isn't and if there are multiple appliances for a meter then NILMTK assumes all appliances on that meter are dominant. NILMTK can't automatically distinguish between multiple appliances on the same meter (at least, not without using NILM!))''')
-        pass
-    print ("Dropout rate: ", elec.dropout_rate())
-    try:
-        print ("Calculating energy per meter:")
-        print (elec.energy_per_meter())
-        print ("Calculating total entropy")
-        print (elec.entropy())
-        
-        print ("Calculating entropy per meter: ")
-        print (elec.entropy_per_meter())
-    except ValueError:
-        print ("ValueError: Total size of array must remain unchanged.")
-        pass
+        print ("Meters: ")
+        for meter in elec.meters:
+            print (meter)
+        print ("Appliances: ")
+        for appliance in elec.appliances:
+            print (appliance)
+        print ("Identifier ")
+        print (elec.identifier)
+        print ("Tuple if meter instances: ")
+        print (elec.instance())
+        print ("Timeframe: ", elec.get_timeframe())
+        print ("Available power AC types: ", elec.available_power_ac_types())
+        print ("Clearing cache...done.")
+        elec.clear_cache()
+        print ("Testing if there are meters from multiple buildings. Result returned by method: ", elec.contains_meters_from_multiple_buildings())
+        print ("List of disabled meters: ", elec.disabled_meters)
+        print ("Trying to determine the dominant appliance: ")
+        try:
+            elec.dominant_appliance()
+        except RuntimeError:
+            print ('''More than one dominant appliance in MeterGroup! (The dominant appliance per meter should be manually specified in the metadata. If it isn't and if there are multiple appliances for a meter then NILMTK assumes all appliances on that meter are dominant. NILMTK can't automatically distinguish between multiple appliances on the same meter (at least, not without using NILM!))''')
+            pass
+                #print ("Dropout rate: ", elec.dropout_rate())
+        try:
+            print ("Calculating energy per meter:")
+            print (elec.energy_per_meter())
+            print ("Calculating total entropy")
+            print (elec.entropy())
             
-    print ("Calculating fraction per meter.")
-    print (elec.fraction_per_meter())
-        
+            print ("Calculating entropy per meter: ")
+            print (elec.entropy_per_meter())
+            print ("Calculating fraction per meter: ")
+            print (elec.fraction_per_meter())
+        except ValueError:
+            print ("ValueError: Total size of array must remain unchanged.")
+            pass
+
+        print ("Calculating fraction per meter.")
+        elec.clear_cache()
+        elec.fraction_per_meter()
+        print (elec.fraction_per_meter())
+
+
+    except Exception as e:
+        logging.exception(e)
+        pass
 
     return None
 
