@@ -50,7 +50,7 @@ def test_all_datasets(directory):
 
 
 def test_single_dataset(dataset_obj):
-    print("Testing all function of {} dataset started at:  {}".format(dataset_obj, time.time()))
+    print("Testing all functions of {} dataset started at:  {}".format(dataset_obj, time.time()))
     print("="*60)
     test_all_buildings(dataset_obj)
     test_metadata_dataset(dataset_obj)
@@ -102,27 +102,60 @@ def test_single_meter_group(elec):
             print (appliance)
         print ("-"*60)
         print ("Good sections: ")
-        elec.good_sections()
+        try:
+            elec.good_sections()
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
-        print  ("Checking if site meter", elec.is_site_meter())
+        try:
+            print  ("Checking if site meter", elec.is_site_meter())
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
-        print ("Printing site meters ", elec.mains())
+        try:
+            print ("Printing site meters ", elec.mains())
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
         print ("Identifier ")
         print (elec.identifier)
         print ("-"*60)
         print ("Tuple of meter instances: ")
-        print (elec.instance())
+        try:
+            print (elec.instance())
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
         print ("Creating generator load object.")
-        elec.load()
+        try:
+            elec.load()
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
-        print ("Printing the meters directly downstream of mains.")
-        elec.meters_directly_downstream_of_mains()
+        try:
+            print ("Printing the meters directly downstream of mains.", elec.meters_directly_downstream_of_mains())
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
-        print ("Printing nested metergroups", elec.nested_metergroups())
+        try:
+            print ("Printing nested metergroups", elec.nested_metergroups())
+        except Exception as e:
+            logging.exception(e)
+            pass
         print ("-"*60)
-        print ("Timeframe: ", elec.get_timeframe())
+        
+        try:
+            print ("Timeframe: ", elec.get_timeframe())
+        except Exception, e:
+        	    logging.exception(e)
+        	    pass
+     
         print ("-"*60)
         print ("Available power AC types: ", elec.available_power_ac_types())
         print ("-"*60)
@@ -131,27 +164,60 @@ def test_single_meter_group(elec):
         print ("-"*60)
         print ("Testing if there are meters from multiple buildings. Result returned by method: ", elec.contains_meters_from_multiple_buildings())
         print ("-"*60)
-        print ("List of disabled meters: ", elec.disabled_meters)
+        try:
+        	    print ("List of disabled meters: ", elec.disabled_meters)
+        except Exception as e:
+        	    logging.exception(e)
+        	    pass
+        	   
         print ("-"*60)
         print ("Power series: ")
-	elec.power_series()
-	elec.power_series_all_data()
+        try:
+	    elec.power_series()
+	    elec.power_series_all_data()
+        except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
 	print ("Printing sub-meters: ", elec.submeters())
 	print ("-"*60)
-	print ("Testing switch_times: ", elec.switch_times())
+	try:
+	    print ("Testing switch_times: ", elec.switch_times())
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
-	print ("Total energy: ", elec.total_energy())
+	try:
+	    print ("Total energy: ", elec.total_energy())
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
 	#print ("Computing pairwise correlation. This will take some time...", elec.pairwise_correlation())
 	print ("-"*60)
-	print ("Computing uptime: ", elec.uptime())
+	try:
+	    print ("Computing uptime: ", elec.uptime())
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
-	print (elec.use_alternative_means())
+	try:
+	    print (elec.use_alternative_mains())
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
-	print ("Vampire power: ", elec.vampire_power())
+	try:
+	    print ("Vampire power: ", elec.vampire_power())
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	print ("-"*60)
-	elec.when_on()
+	try:
+	    elec.when_on()
+	except Exception as e:
+	    logging.exception(e)
+	    pass
 	
         print ("Trying to determine the dominant appliance: ")
         try:
